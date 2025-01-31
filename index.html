@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Block Person (Fixed Position)</title>
+  <style>
+    body {
+      margin: 0; 
+      padding: 0;
+      font-family: sans-serif;
+      background: #fff;
+    }
+    #uiPanel {
+      padding: 1em;
+      background: #ddd;
+    }
+    #uiPanel > div {
+      margin-bottom: 0.5em;
+    }
+    canvas {
+      display: block; 
+      margin: 0 auto; 
+      border: 1px solid #888;
+    }
+    .jointSection {
+      margin-top: 1em; 
+      padding: 0.5em; 
+      border-top: 1px solid #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<div id="uiPanel">
+  <div id="perfDisplay">ms: 0 fps: 0</div>
+
+  <div>
+    <label>Idle Animation / Look Around</label>
+    <button id="idleOnBtn">ON</button>
+    <button id="idleOffBtn">OFF</button>
+  </div>
+  <div>
+    <label>Animation Speed</label>
+    <input type="range" id="animSpeedSlider" min="0" max="2" step="0.01" value="1">
+    <span id="animSpeedVal">1</span>
+  </div>
+  <div>
+    <label>Visible Moon</label>
+    <button id="moonOnBtn">On</button>
+    <button id="moonOffBtn">Off</button>
+    <p style="margin:0.3em 0;">Shift+Click to make him roll the moon!<br>
+    Shift‐Click again to disable the “roll moon” animation</p>
+  </div>
+
+  <div>
+    <h3>Camera Controls</h3>
+    <button id="resetCamBtn">Reset Camera</button><br>
+    X Angle <input type="range" id="camXSlider" min="-180" max="180" value="0"><br>
+    Y Angle <input type="range" id="camYSlider" min="-180" max="180" value="0"><br>
+    Z Angle <input type="range" id="camZSlider" min="-180" max="180" value="0"><br>
+    Size <input type="range" id="camSizeSlider" min="0.5" max="2" step="0.01" value="1.0">
+  </div>
+
+  <!-- Joints -->
+  <div class="jointSection">
+    <h4>First‐level joints</h4>
+    <!-- E.g. shoulders, thighs -->
+    <div>
+      Left Arm: 
+      <input type="range" id="leftArmSlider" min="-90" max="90" value="0">
+      <button id="leftArmOnBtn">ON</button>
+      <button id="leftArmOffBtn">OFF</button>
+    </div>
+    <div>
+      Right Arm: 
+      <input type="range" id="rightArmSlider" min="-90" max="90" value="0">
+      <button id="rightArmOnBtn">ON</button>
+      <button id="rightArmOffBtn">OFF</button>
+    </div>
+    <div>
+      Left Thigh: 
+      <input type="range" id="leftThighSlider" min="-90" max="90" value="0">
+      <button id="leftThighOnBtn">ON</button>
+      <button id="leftThighOffBtn">OFF</button>
+    </div>
+    <div>
+      Right Thigh: 
+      <input type="range" id="rightThighSlider" min="-90" max="90" value="0">
+      <button id="rightThighOnBtn">ON</button>
+      <button id="rightThighOffBtn">OFF</button>
+    </div>
+  </div>
+
+  <div class="jointSection">
+    <h4>Second‐level joints</h4>
+    <!-- E.g. elbows, knees -->
+    <div>
+      Left Elbow:
+      <input type="range" id="leftElbowSlider" min="-90" max="90" value="0">
+      <button id="leftElbowOnBtn">ON</button>
+      <button id="leftElbowOffBtn">OFF</button>
+    </div>
+    <div>
+      Right Elbow:
+      <input type="range" id="rightElbowSlider" min="-90" max="90" value="0">
+      <button id="rightElbowOnBtn">ON</button>
+      <button id="rightElbowOffBtn">OFF</button>
+    </div>
+    <div>
+      Left Knee:
+      <input type="range" id="leftKneeSlider" min="-90" max="90" value="0">
+      <button id="leftKneeOnBtn">ON</button>
+      <button id="leftKneeOffBtn">OFF</button>
+    </div>
+    <div>
+      Right Knee:
+      <input type="range" id="rightKneeSlider" min="-90" max="90" value="0">
+      <button id="rightKneeOnBtn">ON</button>
+      <button id="rightKneeOffBtn">OFF</button>
+    </div>
+  </div>
+
+  <div class="jointSection">
+    <h4>Third‐level joints</h4>
+    <!-- E.g. wrists, ankles, or feet -->
+    <div>
+      Left Foot:
+      <input type="range" id="leftFootSlider" min="-90" max="90" value="0">
+      <button id="leftFootOnBtn">ON</button>
+      <button id="leftFootOffBtn">OFF</button>
+    </div>
+    <div>
+      Right Foot:
+      <input type="range" id="rightFootSlider" min="-90" max="90" value="0">
+      <button id="rightFootOnBtn">ON</button>
+      <button id="rightFootOffBtn">OFF</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="glCanvas" width="500" height="500"></canvas>
+
+<!-- Inline Shaders -->
+<script id="vertexShader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+uniform mat4 uModelMatrix;
+uniform mat4 uGlobalRotation;
+uniform vec3 uColor;
+
+varying vec3 vColor;
+
+void main() {
+    gl_Position = uGlobalRotation * uModelMatrix * a_position;
+    vColor = uColor;
+}
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec3 vColor;
+void main() {
+    gl_FragColor = vec4(vColor, 1.0);
+}
+</script>
+
+<!-- Our JS files -->
+<script src="matrix.js"></script>
+<script src="webgl-utils.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
