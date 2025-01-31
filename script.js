@@ -1,5 +1,5 @@
 // XIFAN LUO
-// 2021/10/14
+// 2025.1.31
 // CSE 160 ASSIGNMENT 2
 // script.js
 //
